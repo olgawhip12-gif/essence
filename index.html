@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Player List App</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { margin: 0; padding: 0; background: #121212; font-family: sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        
+        .header { background: #121212; padding: 10px; border-bottom: 1px solid #333; z-index: 1000; flex-shrink: 0; }
+        
+        .refresh-btn { 
+            width: 100%; background: #1e1e1e; color: #3498db; border: 1px solid #3498db; 
+            padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;
+        }
+        .refresh-btn:active { background: #3498db; color: #fff; }
+
+        #main-frame { flex-grow: 1; border: none; width: 100%; height: 100%; background: #121212; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="refresh-btn" onclick="refreshFrame()">🔄 Оновити список</button>
+    </div>
+
+    <iframe 
+        id="main-frame" 
+        src="https://script.google.com/macros/s/AKfycbw-K7TBriDxIE-aF6rhegXzX61uAK0doDgjZDBkURZw6pEcqrnHL-2nUwyaaCZOy6-4ig/exec" 
+        allow="clipboard-write">
+    </iframe>
+
+    <script>
+        function refreshFrame() {
+            const frame = document.getElementById('main-frame');
+            const btn = document.querySelector('.refresh-btn');
+            const originalSrc = frame.src;
+            
+            btn.innerText = '⌛ Оновлюю...';
+            
+            // Перезавантажуємо фрейм через src, щоб уникнути кешування
+            frame.src = originalSrc; 
+
+            setTimeout(() => {
+                btn.innerText = '🔄 Оновити список';
+            }, 1500);
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
